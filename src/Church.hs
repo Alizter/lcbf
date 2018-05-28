@@ -56,39 +56,6 @@ printReduction t = putStrLn $ blockFormat
                         $ map (drawTree . toDataTree) $ redSteps t
 printLReduction t = putStrLn $ unlines $ map show $ redSteps t
 
-test0 = printReduction ex0
-test1 = printReduction ex1
-test2 = printReduction ex2
-test3 = printReduction ex3
-
-
-
-    
--- Example expressions
-
--- | ((λ 0) (λ (λ 2 2))) ((λ -1) (λ -2))
--- | ((λ x.y) (λ z.(λ q.z z))) ((λ f.g) (λ y.h))
-
-
-ex0 :: Term
-ex0 = App (App (Lam (Var 0))
-                   (Lam (Lam (App (Var 2)(Var 2)))))
-            (App (Lam (Var (-1)))
-                   (Lam (Var (-2))))
-ex1 ::  Term
-ex1 = App (Lam $ Var 1) $ Var 0
-
-ex2 :: Term
-ex2 = skiL $ SKApp (SKApp S K) K
-
-ex3 :: Term
-ex3 = skiL S
-
-x = Var 0
-y = Var (-1)
-
-ex4 :: Term
-ex4 = (Lam $ Lam $ (Var 1) # (Var 2)) # x # y
 
 (#) :: Term -> Term -> Term
 t1 # t2 = App t1 t2
@@ -266,11 +233,3 @@ lmRedStrat t
     | snd p         = lmRedStrat $ fst p
     | otherwise     = t
         where p = lmRed t
-
--- head reduction
-hdRed :: Term -> (Term, Bool)
-hdRed t@(App (Lam t1) t2)   = (betaRed t, True)
-hdRed (App t1 t2)           = (App (fst p) t2, snd p)
-    where p = hdRed t1
-hdRed (Lam t)               = (\f (x, y) -> (f x, y)) Lam $ lmRed t
-hdRed t                     = (t, False)

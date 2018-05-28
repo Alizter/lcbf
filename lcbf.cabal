@@ -51,7 +51,7 @@ cabal-version:       >=1.10
 
 library
   -- Modules exported by the library.
-  exposed-modules:     Main,Church,BF,LCBF
+  exposed-modules:     Church,BF,LCBF
   
   -- Modules included in this library but not exported.
   -- other-modules:       
@@ -68,3 +68,8 @@ library
   -- Base language which the package is written in.
   default-language:    Haskell2010
   
+Test-Suite test-church
+    type:               exitcode-stdio-1.0
+    main-is:            Tests.hs
+    build-depends:      base >=4.8 && <4.9, containers, split
+    hs-source-dirs:     tests, src
